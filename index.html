@@ -276,31 +276,73 @@
                     <label class="block text-slate-400 text-xs mb-1">Số điểm NRL</label>
                     <input type="number" id="input-points" step="0.1" value="0.5" class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
                 </div>
+                <div class="md:col-span-3">
+                    <label class="block text-slate-400 text-xs mb-1">Link minh chứng URL</label>
+                    <input type="text" id="input-link" placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
+                </div>
+                <div class="md:col-span-3">
+                    <label class="block text-slate-400 text-xs mb-1">Tải lên file/ảnh minh chứng</label>
+                    <div class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 flex items-center justify-between">
+                        <!-- Nút bấm chọn file -->
+                        <label class="flex items-center gap-2 cursor-pointer text-slate-300 text-sm flex-grow truncate mr-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-emerald-400 text-base"></i>
+                            <span id="file-chosen-text" class="truncate">Chọn file hoặc ảnh từ máy tính...</span>
+                            <input type="file" id="input-file" class="hidden" accept="image/*,.pdf,.doc,.docx" onchange="handleFileSelect(this)">
+                        </label>
+                        <!-- Nút thùng rác nhỏ để xóa file đã chọn -->
+                        <button type="button" id="remove-file-btn" onclick="clearSelectedFile()" class="text-slate-500 hover:text-red-400 p-1.5 transition-colors hidden" title="Xóa file đã chọn">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="flex justify-end">
-                <button onclick="addEvent()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-6 py-2.5 rounded-xl text-sm transition-colors flex items-center gap-2">
+                <button onclick="addEvent()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-6 py-2.5 rounded-xl text-sm transition-colors flex items-center gap-2 shadow-lg shadow-emerald-500/20">
                     <i class="fa-solid fa-check"></i> OK (Thêm vào)
                 </button>
             </div>
         </div>
 
-        <!-- Lưới danh sách sự kiện (Tự động hiển thị) -->
+        <!-- Lưới danh sách sự kiện -->
         <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Các thẻ card sẽ hiển thị ở đây -->
+            <!-- Dữ liệu render tự động -->
         </div>
     </div>
 </section>
 
-<!-- Đoạn Script Xử lý tương tác -->
+<!-- Đoạn Script Xử lý -->
 <script>
-    // Dữ liệu mẫu ban đầu
-    let eventData = [
-        { id: 1, title: "Diễn đàn Kinh tế và Quản trị Hàng không - AMEF", date: "Tháng 8/2026", points: 0.5, icon: "fa-award" },
-        { id: 2, title: "SPELLING BEE 2026 (vòng 1)", date: "Tháng 9/2026", points: 0.5, icon: "fa-award" },
-        { id: 3, title: "sk đợt 1 của khoa QTKD", date: "Tháng 9/2026", points: 0.5, icon: "fa-award" }
-    ];
+    let eventData = JSON.parse(localStorage.getItem('nrl_events_text')) || [];
+    let selectedFileObject = null;
+    let selectedFileName = '';
 
-    // Hàm render giao diện
+    function handleFileSelect(input) {
+        const fileChosenText = document.getElementById('file-chosen-text');
+        const removeBtn = document.getElementById('remove-file-btn');
+
+        if (input.files && input.files[0]) {
+            selectedFileObject = input.files[0];
+            selectedFileName = selectedFileObject.name;
+            fileChosenText.textContent = selectedFileName;
+            fileChosenText.classList.add('text-emerald-400', 'font-medium');
+            removeBtn.classList.remove('hidden');
+        }
+    }
+
+    function clearSelectedFile() {
+        document.getElementById('input-file').value = '';
+        document.getElementById('file-chosen-text').textContent = 'Chọn file hoặc ảnh từ máy tính...';
+        document.getElementById('file-chosen-text').classList.remove('text-emerald-400', 'font-medium');
+        document.getElementById('remove-file-btn').classList.add('hidden');
+        selectedFileObject = null;
+        selectedFileName = '';
+    }
+
+    function saveAndRender() {
+        localStorage.setItem('nrl_events_text', JSON.stringify(eventData));
+        renderEvents();
+    }
+
     function renderEvents() {
         const gridContainer = document.getElementById('events-grid');
         const totalEventsEl = document.getElementById('total-events');
@@ -309,77 +351,113 @@
         gridContainer.innerHTML = '';
         let totalPoints = 0;
 
-        eventData.forEach((event, index) => {
+        if (eventData.length === 0) {
+            gridContainer.innerHTML = `
+                <div class="col-span-full text-center py-12 text-slate-500 text-sm">
+                    Chưa có sự kiện nào được thêm. Hãy nhập thông tin ở khung phía trên!
+                </div>
+            `;
+            totalEventsEl.textContent = '00';
+            totalPointsEl.textContent = '0';
+            return;
+        }
+
+        eventData.forEach((event) => {
             totalPoints += Number(event.points);
 
+            let proofsHTML = '';
+
+            // CHỈ HIỆN KHUNG XANH LÁ NẾU NGƯỜI DÙNG THỰC SỰ NHẬP LINK
+            if (event.link && event.link.trim() !== '') {
+                let formattedLink = event.link.startsWith('http') ? event.link : 'https://' + event.link;
+                proofsHTML += `
+                    <a href="${formattedLink}" target="_blank" class="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 px-3 py-2 rounded-xl flex items-center justify-between transition-colors mb-2">
+                        <span class="truncate mr-2"><i class="fa-solid fa-link mr-1"></i> ${event.link}</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] flex-shrink-0"></i>
+                    </a>
+                `;
+            }
+
+            // CHỈ HIỆN KHUNG XANH DƯƠNG NẾU NGƯỜI DÙNG THỰC SỰ TẢI FILE
+            if (event.fileUrl) {
+                proofsHTML += `
+                    <a href="${event.fileUrl}" target="_blank" class="text-xs text-blue-400 bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 px-3 py-2 rounded-xl flex items-center justify-between transition-colors mb-2">
+                        <span class="truncate mr-2"><i class="fa-solid fa-file-image mr-1"></i> ${event.fileName}</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] flex-shrink-0"></i>
+                    </a>
+                `;
+            }
+
             const cardHTML = `
-                <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl relative flex flex-col justify-between hover:border-emerald-500/50 transition-all duration-300 group">
+                <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl relative flex flex-col justify-between hover:border-emerald-500/50 transition-all duration-300">
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                                <i class="fa-solid ${event.icon || 'fa-star'}"></i>
+                                <i class="fa-solid fa-award"></i>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">+${event.points} NRL</span>
-                                <!-- Nút thùng rác để xóa card -->
-                                <button onclick="deleteEvent(${event.id})" class="text-slate-500 hover:text-red-400 p-1.5 transition-colors" title="Xóa sự kiện này">
+                                <button onclick="deleteEvent(${event.id})" class="text-slate-500 hover:text-red-400 p-1.5 transition-colors" title="Xóa sự kiện">
                                     <i class="fa-solid fa-trash-can text-xs"></i>
                                 </button>
                             </div>
                         </div>
-                        <h4 class="text-lg font-bold text-white mb-2">${event.title}</h4>
-                    </div>
-                    <div class="pt-4 border-t border-slate-800/60 flex items-center justify-between mt-6">
-                        <span class="text-xs text-slate-500">${event.date}</span>
-                        <a href="#" target="_blank" class="text-xs text-emerald-400 hover:underline flex items-center gap-1 font-medium">
-                            Xem minh chứng <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                        </a>
+                        <h4 class="text-lg font-bold text-white mb-3">${event.title}</h4>
+                        <div class="space-y-1">
+                            ${proofsHTML}
+                        </div>
                     </div>
                 </div>
             `;
             gridContainer.innerHTML += cardHTML;
         });
 
-        // Cập nhật số lượng và tổng điểm
         totalEventsEl.textContent = eventData.length < 10 ? '0' + eventData.length : eventData.length;
         totalPointsEl.textContent = totalPoints;
     }
 
-    // Hàm thêm sự kiện từ ô input
     function addEvent() {
         const titleInput = document.getElementById('input-title');
         const dateInput = document.getElementById('input-date');
         const pointsInput = document.getElementById('input-points');
+        const linkInput = document.getElementById('input-link');
 
         if (!titleInput.value.trim()) {
             alert('Vui lòng nhập tên sự kiện!');
             return;
         }
 
+        let fileUrl = '';
+        if (selectedFileObject) {
+            fileUrl = URL.createObjectURL(selectedFileObject);
+        }
+
         const newEvent = {
             id: Date.now(),
-            title: titleInput.value,
-            date: dateInput.value || 'Tháng hiện tại',
+            title: titleInput.value.trim(),
+            date: dateInput.value.trim() || 'Tháng hiện tại',
             points: parseFloat(pointsInput.value) || 0.5,
-            icon: 'fa-award'
+            link: linkInput.value.trim(),
+            fileUrl: fileUrl,
+            fileName: selectedFileName
         };
 
         eventData.push(newEvent);
-        renderEvents();
+        saveAndRender();
 
-        // Reset lại form trống sau khi thêm
+        // Reset form sạch sẽ
         titleInput.value = '';
         dateInput.value = '';
         pointsInput.value = '0.5';
+        linkInput.value = '';
+        clearSelectedFile();
     }
 
-    // Hàm xóa sự kiện khi bấm nút thùng rác
     function deleteEvent(id) {
         eventData = eventData.filter(event => event.id !== id);
-        renderEvents();
+        saveAndRender();
     }
 
-    // Chạy khi tải trang
     document.addEventListener('DOMContentLoaded', renderEvents);
 </script>
 
