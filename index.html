@@ -346,7 +346,7 @@
     function renderEvents() {
         const gridContainer = document.getElementById('events-grid');
         const totalEventsEl = document.getElementById('total-events');
-        const totalPointsEl = document.getElementById('total-points');
+        const totalDaysEl = document.getElementById('total-days');
 
         gridContainer.innerHTML = '';
         let totalPoints = 0;
@@ -358,7 +358,7 @@
                 </div>
             `;
             totalEventsEl.textContent = '00';
-            totalPointsEl.textContent = '0';
+            totalDaysEl.textContent = '0';
             return;
         }
 
@@ -413,7 +413,7 @@
         });
 
         totalEventsEl.textContent = eventData.length < 10 ? '0' + eventData.length : eventData.length;
-        totalPointsEl.textContent = totalPoints;
+        totalDaysEl.textContent = totalPoints;
     }
 
     function addEvent() {
