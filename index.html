@@ -195,7 +195,7 @@
     </section>
 
     <section id="skills" class="py-24 relative">
-        <div class="container mx-auto px-6 max-w-5xl">
+    <div class="container mx-auto px-6 max-w-5xl">
         <!-- Tiêu đề mục -->
         <div class="text-center mb-10">
             <span class="text-xs uppercase tracking-widest text-emerald-400 font-semibold">Hoạt động có điểm</span>
@@ -211,7 +211,7 @@
                 </div>
                 <div>
                     <div class="text-slate-400 text-xs">Tổng sự kiện tham gia</div>
-                    <div class="text-2xl font-bold text-white"><span id="total-events">0</span> <span class="text-xs font-normal text-slate-500">hoạt động</span></div>
+                    <div class="text-2xl font-bold text-white"><span id="nrl-total-events">0</span> <span class="text-xs font-normal text-slate-500">hoạt động</span></div>
                 </div>
             </div>
             <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl flex items-center gap-4">
@@ -219,13 +219,13 @@
                     <i class="fa-solid fa-star"></i>
                 </div>
                 <div>
-                    <div class="text-slate-400 text-xs">Tổng ngày rèn luyện</div>
-                    <div class="text-2xl font-bold text-emerald-400"><span id="total-days">0</span> <span class="text-xs font-normal text-slate-500">ngày</span></div>
+                    <div class="text-slate-400 text-xs">Tổng điểm NRL</div>
+                    <div class="text-2xl font-bold text-emerald-400"><span id="nrl-total-days">0</span> <span class="text-xs font-normal text-slate-500">định mức</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- Khung Nhập Liệu (Form thêm sự kiện mới) -->
+        <!-- Khung Nhập Liệu -->
         <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-2xl mb-12 shadow-xl">
             <h4 class="text-white font-bold text-base mb-4 flex items-center gap-2">
                 <i class="fa-solid fa-plus-circle text-emerald-400"></i> Thêm sự kiện mới
@@ -233,108 +233,107 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
                     <label class="block text-slate-400 text-xs mb-1">Tên sự kiện</label>
-                    <input type="text" id="input-title" placeholder="Ví dụ: Hội thảo AI..." class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="nrl-input-title" placeholder="Ví dụ: Hội thảo AI..." class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-slate-400 text-xs mb-1">Ngày diễn ra</label>
-                    <input type="text" id="input-date" placeholder="Ví dụ: Tháng 9/2026" class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="nrl-input-date" placeholder="Ví dụ: Tháng 9/2026" class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
                 </div>
                 <div>
                     <label class="block text-slate-400 text-xs mb-1">Số điểm NRL</label>
-                    <input type="number" id="input-points" step="0.1" value="0.5" class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
+                    <input type="number" id="nrl-input-points" step="0.1" value="0.5" class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
                 </div>
                 <div class="md:col-span-3">
                     <label class="block text-slate-400 text-xs mb-1">Link minh chứng URL</label>
-                    <input type="text" id="input-link" placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="nrl-input-link" placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 text-white text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:border-emerald-500">
                 </div>
                 <div class="md:col-span-3">
                     <label class="block text-slate-400 text-xs mb-1">Tải lên file/ảnh minh chứng</label>
                     <div class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 flex items-center justify-between">
-                        <!-- Nút bấm chọn file -->
                         <label class="flex items-center gap-2 cursor-pointer text-slate-300 text-sm flex-grow truncate mr-2">
                             <i class="fa-solid fa-cloud-arrow-up text-emerald-400 text-base"></i>
-                            <span id="file-chosen-text" class="truncate">Chọn file hoặc ảnh từ máy tính...</span>
-                            <input type="file" id="input-file" class="hidden" accept="image/*,.pdf,.doc,.docx" onchange="handleFileSelect(this)">
+                            <span id="nrl-file-chosen-text" class="truncate">Chọn file hoặc ảnh từ máy tính...</span>
+                            <input type="file" id="nrl-input-file" class="hidden" accept="image/*,.pdf,.doc,.docx" onchange="nrlHandleFileSelect(this)">
                         </label>
-                        <!-- Nút thùng rác nhỏ để xóa file đã chọn -->
-                        <button type="button" id="remove-file-btn" onclick="clearSelectedFile()" class="text-slate-500 hover:text-red-400 p-1.5 transition-colors hidden" title="Xóa file đã chọn">
+                        <button type="button" id="nrl-remove-file-btn" onclick="nrlClearSelectedFile()" class="text-slate-500 hover:text-red-400 p-1.5 transition-colors hidden" title="Xóa file đã chọn">
                             <i class="fa-solid fa-trash-can text-xs"></i>
                         </button>
                     </div>
                 </div>
             </div>
             <div class="flex justify-end">
-                <button onclick="addEvent()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-6 py-2.5 rounded-xl text-sm transition-colors flex items-center gap-2 shadow-lg shadow-emerald-500/20">
+                <button type="button" onclick="nrlAddEvent()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-6 py-2.5 rounded-xl text-sm transition-colors flex items-center gap-2 shadow-lg shadow-emerald-500/20 cursor-pointer">
                     <i class="fa-solid fa-check"></i> OK (Thêm vào)
                 </button>
             </div>
         </div>
 
         <!-- Lưới danh sách sự kiện -->
-        <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="nrl-events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Dữ liệu render tự động -->
         </div>
     </div>
 </section>
 
-<!-- Đoạn Script Xử lý -->
+<!-- Script Xử lý Riêng biệt (Không bị xung đột) -->
 <script>
-    let eventData = JSON.parse(localStorage.getItem('nrl_events_text')) || [];
-    let selectedFileObject = null;
-    let selectedFileName = '';
+    let nrlEventData = JSON.parse(localStorage.getItem('nrl_events_custom_v2')) || [];
+    let nrlSelectedFileObject = null;
+    let nrlSelectedFileName = '';
 
-    function handleFileSelect(input) {
-        const fileChosenText = document.getElementById('file-chosen-text');
-        const removeBtn = document.getElementById('remove-file-btn');
+    function nrlHandleFileSelect(input) {
+        const fileChosenText = document.getElementById('nrl-file-chosen-text');
+        const removeBtn = document.getElementById('nrl-remove-file-btn');
 
         if (input.files && input.files[0]) {
-            selectedFileObject = input.files[0];
-            selectedFileName = selectedFileObject.name;
-            fileChosenText.textContent = selectedFileName;
+            nrlSelectedFileObject = input.files[0];
+            nrlSelectedFileName = nrlSelectedFileObject.name;
+            fileChosenText.textContent = nrlSelectedFileName;
             fileChosenText.classList.add('text-emerald-400', 'font-medium');
             removeBtn.classList.remove('hidden');
         }
     }
 
-    function clearSelectedFile() {
-        document.getElementById('input-file').value = '';
-        document.getElementById('file-chosen-text').textContent = 'Chọn file hoặc ảnh từ máy tính...';
-        document.getElementById('file-chosen-text').classList.remove('text-emerald-400', 'font-medium');
-        document.getElementById('remove-file-btn').classList.add('hidden');
-        selectedFileObject = null;
-        selectedFileName = '';
+    function nrlClearSelectedFile() {
+        document.getElementById('nrl-input-file').value = '';
+        document.getElementById('nrl-file-chosen-text').textContent = 'Chọn file hoặc ảnh từ máy tính...';
+        document.getElementById('nrl-file-chosen-text').classList.remove('text-emerald-400', 'font-medium');
+        document.getElementById('nrl-remove-file-btn').classList.add('hidden');
+        nrlSelectedFileObject = null;
+        nrlSelectedFileName = '';
     }
 
-    function saveAndRender() {
-        localStorage.setItem('nrl_events_text', JSON.stringify(eventData));
-        renderEvents();
+    function nrlSaveAndRender() {
+        localStorage.setItem('nrl_events_custom_v2', JSON.stringify(nrlEventData));
+        nrlRenderEvents();
     }
 
-    function renderEvents() {
-        const gridContainer = document.getElementById('events-grid');
-        const totalEventsEl = document.getElementById('total-events');
-        const totalDaysEl = document.getElementById('total-days');
+    function nrlRenderEvents() {
+        const gridContainer = document.getElementById('nrl-events-grid');
+        const totalEventsEl = document.getElementById('nrl-total-events');
+        const totalDaysEl = document.getElementById('nrl-total-days');
+
+        if (!gridContainer) return;
 
         gridContainer.innerHTML = '';
         let totalPoints = 0;
 
-        if (eventData.length === 0) {
+        if (nrlEventData.length === 0) {
             gridContainer.innerHTML = `
-                <div class="col-span-full text-center py-12 text-slate-500 text-sm">
+                <div class="col-span-full text-center py-12 text-slate-500 text-sm bg-slate-900/40 border border-slate-800/80 rounded-2xl">
                     Chưa có sự kiện nào được thêm. Hãy nhập thông tin ở khung phía trên!
                 </div>
             `;
-            totalEventsEl.textContent = '00';
+            totalEventsEl.textContent = '0';
             totalDaysEl.textContent = '0';
             return;
         }
 
-        eventData.forEach((event) => {
-            totalPoints += Number(event.points);
+        nrlEventData.forEach((event) => {
+            totalPoints += parseFloat(event.points) || 0;
 
             let proofsHTML = '';
 
-            // CHỈ HIỆN KHUNG XANH LÁ NẾU NGƯỜI DÙNG THỰC SỰ NHẬP LINK
             if (event.link && event.link.trim() !== '') {
                 let formattedLink = event.link.startsWith('http') ? event.link : 'https://' + event.link;
                 proofsHTML += `
@@ -345,7 +344,6 @@
                 `;
             }
 
-            // CHỈ HIỆN KHUNG XANH DƯƠNG NẾU NGƯỜI DÙNG THỰC SỰ TẢI FILE
             if (event.fileUrl) {
                 proofsHTML += `
                     <a href="${event.fileUrl}" target="_blank" class="text-xs text-blue-400 bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 px-3 py-2 rounded-xl flex items-center justify-between transition-colors mb-2">
@@ -356,7 +354,7 @@
             }
 
             const cardHTML = `
-                <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl relative flex flex-col justify-between hover:border-emerald-500/50 transition-all duration-300">
+                <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl relative flex flex-col justify-between hover:border-emerald-500/50 transition-all duration-300 shadow-lg">
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
@@ -364,12 +362,13 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">+${event.points} NRL</span>
-                                <button onclick="deleteEvent(${event.id})" class="text-slate-500 hover:text-red-400 p-1.5 transition-colors" title="Xóa sự kiện">
+                                <button type="button" onclick="nrlDeleteEvent(${event.id})" class="text-slate-500 hover:text-red-400 p-1.5 transition-colors cursor-pointer" title="Xóa sự kiện">
                                     <i class="fa-solid fa-trash-can text-xs"></i>
                                 </button>
                             </div>
                         </div>
-                        <h4 class="text-lg font-bold text-white mb-3">${event.title}</h4>
+                        <h4 class="text-lg font-bold text-white mb-1">${event.title}</h4>
+                        <p class="text-xs text-slate-400 mb-3"><i class="fa-regular fa-calendar mr-1"></i> ${event.date}</p>
                         <div class="space-y-1">
                             ${proofsHTML}
                         </div>
@@ -379,15 +378,15 @@
             gridContainer.innerHTML += cardHTML;
         });
 
-        totalEventsEl.textContent = eventData.length < 10 ? '0' + eventData.length : eventData.length;
-        totalDaysEl.textContent = totalPoints;
+        totalEventsEl.textContent = nrlEventData.length;
+        totalDaysEl.textContent = Number.isInteger(totalPoints) ? totalPoints : totalPoints.toFixed(1);
     }
 
-    function addEvent() {
-        const titleInput = document.getElementById('input-title');
-        const dateInput = document.getElementById('input-date');
-        const pointsInput = document.getElementById('input-points');
-        const linkInput = document.getElementById('input-link');
+    function nrlAddEvent() {
+        const titleInput = document.getElementById('nrl-input-title');
+        const dateInput = document.getElementById('nrl-input-date');
+        const pointsInput = document.getElementById('nrl-input-points');
+        const linkInput = document.getElementById('nrl-input-link');
 
         if (!titleInput.value.trim()) {
             alert('Vui lòng nhập tên sự kiện!');
@@ -395,8 +394,8 @@
         }
 
         let fileUrl = '';
-        if (selectedFileObject) {
-            fileUrl = URL.createObjectURL(selectedFileObject);
+        if (nrlSelectedFileObject) {
+            fileUrl = URL.createObjectURL(nrlSelectedFileObject);
         }
 
         const newEvent = {
@@ -406,26 +405,28 @@
             points: parseFloat(pointsInput.value) || 0.5,
             link: linkInput.value.trim(),
             fileUrl: fileUrl,
-            fileName: selectedFileName
+            fileName: nrlSelectedFileName
         };
 
-        eventData.push(newEvent);
-        saveAndRender();
+        nrlEventData.push(newEvent);
+        nrlSaveAndRender();
 
-        // Reset form sạch sẽ
+        // Reset form
         titleInput.value = '';
         dateInput.value = '';
         pointsInput.value = '0.5';
         linkInput.value = '';
-        clearSelectedFile();
+        nrlClearSelectedFile();
     }
 
-    function deleteEvent(id) {
-        eventData = eventData.filter(event => event.id !== id);
-        saveAndRender();
+    function nrlDeleteEvent(id) {
+        nrlEventData = nrlEventData.filter(event => event.id !== id);
+        nrlSaveAndRender();
     }
 
-    document.addEventListener('DOMContentLoaded', renderEvents);
+    // Tự động load dữ liệu khi vào trang
+    document.addEventListener('DOMContentLoaded', nrlRenderEvents);
+    nrlRenderEvents(); // Chạy trực tiếp phòng hờ sự kiện DOMContentLoaded đã chạy qua
 </script>
 
     <section id="projects" class="py-24 bg-slate-900/40 border-t border-slate-900">
