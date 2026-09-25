@@ -62,7 +62,7 @@
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="#hero" class="flex items-center gap-3 group">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center text-slate-950 font-bold text-lg shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform font-code">
-                    MT
+                    Minh Tai
                 </div>
                 <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Minh Tài</span>
             </a>
@@ -125,7 +125,7 @@
                     <span class="text-slate-500 font-code">// socials:</span>
                     <a href="https://github.com" target="_blank" class="hover:text-emerald-400 transition-colors text-lg" title="GitHub"><i class="fa-brands fa-github"></i></a>
                     <a href="https://linkedin.com" target="_blank" class="hover:text-emerald-400 transition-colors text-lg" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="mailto:minhtai@university.edu" class="hover:text-emerald-400 transition-colors text-lg" title="Email"><i class="fa-solid fa-envelope"></i></a>
+                    <a href="mailto:2008minhtai@gmail.com" class="hover:text-emerald-400 transition-colors text-lg" title="Email"><i class="fa-solid fa-envelope"></i></a>
                 </div>
             </div>
             
@@ -220,7 +220,7 @@
                 </div>
                 <div>
                     <div class="text-slate-400 text-xs">Tổng điểm NRL</div>
-                    <div class="text-2xl font-bold text-emerald-400"><span id="nrl-total-days">0</span> <span class="text-xs font-normal text-slate-500">định mức</span></div>
+                    <div class="text-2xl font-bold text-emerald-400"><span id="nrl-total-days">0</span> <span class="text-xs font-normal text-slate-500">NRL</span></div>
                 </div>
             </div>
         </div>
@@ -637,7 +637,7 @@
         </div>
     </section>
 
-    <!-- WIDGET NỔI GÓC PHẢI MÀN HÌNH -->
+    
     <div id="floatingDeadlineWidget" class="fixed bottom-6 right-6 z-40 max-w-sm w-full hidden transition-all duration-300">
         <div class="bg-slate-900/95 border border-emerald-500/40 backdrop-blur-md rounded-2xl p-4 shadow-2xl neon-glow">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
@@ -654,7 +654,7 @@
     </div>
 
 
-    <!-- ==================== PHẦN 2: XỬ LÝ LOGIC (JAVASCRIPT) ==================== -->
+    
     <script>
         // --- DEADLINE COUNTER LOGIC ---
         let deadlines = JSON.parse(localStorage.getItem('my_deadlines')) || [];
@@ -692,12 +692,12 @@
         }
 
         function renderDeadlines() {
-            // Sắp xếp tự động: thời gian gần nhất lên đầu
+            
             deadlines.sort((a, b) => new Date(a.time) - new Date(b.time));
 
             totalCount.textContent = `${deadlines.length} active`;
             
-            // 1. Render phần danh sách chính tại mục Contact
+            
             if (deadlines.length === 0) {
                 deadlineList.innerHTML = `
                     <div class="text-center py-10 bg-slate-900/40 border border-slate-800/80 rounded-2xl text-slate-500 text-sm">
